@@ -1,5 +1,5 @@
 ## grpc_protobuff_test
 
-# https://www.youtube.com/watch?v=YudT0nHvkkE
+https://www.youtube.com/watch?v=YudT0nHvkkE
 
-# protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative usermgmt/usermgmt.proto
+protoc --go_out=. --go_opt=paths=source_relative --go-grpc_out=. --go-grpc_opt=paths=source_relative usermgmt/usermgmt.proto

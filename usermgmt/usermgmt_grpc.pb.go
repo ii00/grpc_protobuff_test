@@ -23,6 +23,7 @@ const _ = grpc.SupportPackageIsVersion7
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserManagmentClient interface {
 	CreateNewUser(ctx context.Context, in *NewUser, opts ...grpc.CallOption) (*User, error)
+	GetUsers(ctx context.Context, in *GetUsersParams, opts ...grpc.CallOption) (*UsersList, error)
 }
 
 type userManagmentClient struct {
@@ -42,11 +43,21 @@ func (c *userManagmentClient) CreateNewUser(ctx context.Context, in *NewUser, op
 	return out, nil
 }
 
+func (c *userManagmentClient) GetUsers(ctx context.Context, in *GetUsersParams, opts ...grpc.CallOption) (*UsersList, error) {
+	out := new(UsersList)
+	err := c.cc.Invoke(ctx, "/usermgmt.UserManagment/GetUsers", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // UserManagmentServer is the server API for UserManagment service.
 // All implementations must embed UnimplementedUserManagmentServer
 // for forward compatibility
 type UserManagmentServer interface {
 	CreateNewUser(context.Context, *NewUser) (*User, error)
+	GetUsers(context.Context, *GetUsersParams) (*UsersList, error)
 	mustEmbedUnimplementedUserManagmentServer()
 }
 
@@ -56,6 +67,9 @@ type UnimplementedUserManagmentServer struct {
 
 func (UnimplementedUserManagmentServer) CreateNewUser(context.Context, *NewUser) (*User, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateNewUser not implemented")
+}
+func (UnimplementedUserManagmentServer) GetUsers(context.Context, *GetUsersParams) (*UsersList, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUsers not implemented")
 }
 func (UnimplementedUserManagmentServer) mustEmbedUnimplementedUserManagmentServer() {}
 
@@ -88,6 +102,24 @@ func _UserManagment_CreateNewUser_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _UserManagment_GetUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUsersParams)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserManagmentServer).GetUsers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/usermgmt.UserManagment/GetUsers",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserManagmentServer).GetUsers(ctx, req.(*GetUsersParams))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // UserManagment_ServiceDesc is the grpc.ServiceDesc for UserManagment service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -98,6 +130,10 @@ var UserManagment_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateNewUser",
 			Handler:    _UserManagment_CreateNewUser_Handler,
+		},
+		{
+			MethodName: "GetUsers",
+			Handler:    _UserManagment_GetUsers_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"time"
 
@@ -28,14 +29,22 @@ func main() {
 	var new_users = make(map[string]int32)
 	new_users["Alice"] = 43
 	new_users["Kiko"] = 14
+	new_users["Ceci"] = 21
 	for name, age := range new_users {
 		r, err := c.CreateNewUser(ctx, &pb.NewUser{Name: name, Age: age})
 		if err != nil {
 			log.Fatalf("Could not create user: %v", err)
 		}
 		log.Printf(`User Details:
-		NAME: %s
-		AGE: %d
-		ID: %d`, r.GetName(), r.GetAge(), r.GetId())
+NAME: %s
+AGE: %d
+ID: %d`, r.GetName(), r.GetAge(), r.GetId())
 	}
+	params := &pb.GetUsersParams{}
+	r, err := c.GetUsers(ctx, params)
+	if err != nil {
+		log.Fatalf("Could not retrieve users: %v", err)
+	}
+	log.Print("\nUSER LIST: \n")
+	fmt.Printf("r.GetUsers(): %v\n", r.GetUsers())
 }

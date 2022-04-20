@@ -1,0 +1,34 @@
+{
+    "users": [
+        {
+            "name": "Alice",
+            "age": 43,
+            "id": 81
+        },
+        {
+            "name": "Kiko",
+            "age": 14,
+            "id": 887
+        },
+        {
+            "name": "Ceci",
+            "age": 21,
+            "id": 847
+        },
+        {
+            "name": "Ceci",
+            "age": 21,
+            "id": 59
+        },
+        {
+            "name": "Alice",
+            "age": 43,
+            "id": 81
+        },
+        {
+            "name": "Kiko",
+            "age": 14,
+            "id": 318
+        }
+    ]
+}
